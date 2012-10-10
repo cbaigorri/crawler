@@ -1,0 +1,13 @@
+{
+  "name": "crawler",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node server"
+  },
+  "dependencies": {
+    "request": "latest"
+    , "jsdom": "latest"
+    , "coffee-script": "latest"
+  }
+}
