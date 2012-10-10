@@ -97,7 +97,7 @@ HashTable = (obj) ->
   @
 
 ###
-Initiate crawling
+Variables
 ###
 
 protocol = undefined
@@ -106,6 +106,10 @@ red = "\u001b[31m"
 green = "\u001b[32m"
 yellow = "\u001b[33m"
 reset = "\u001b[0m"
+
+###
+Methods
+###
 
 # load a url
 loadUrl = (url) ->
@@ -137,6 +141,7 @@ loadUrl = (url) ->
     # record the response
     links.setItem url, { status : response.statusCode, 'content-type' : response.headers['content-type'] }
     
+    # print some feedback to the console
     if response.statusCode is 404
       console.log red + url, links.getItem(url)
     else if response.statusCode is 200
@@ -144,15 +149,12 @@ loadUrl = (url) ->
     else 
       console.log yellow + url, links.getItem(url)
 
-      console.log isScript(url)
-
-    # if this is html then parse links
+    # if this is html, not external or a 404 then parse links
     if response.headers['content-type'] is 'text/html' and !isExternal(seed, url) and response.statusCode isnt 404 
       $protocol = protocol
       $host = host
       # load the page
       jsdom.env url, ["http://code.jquery.com/jquery.js"], (errors, window) ->
-        
         # parse the links
         $links = links
         $ = window.$
@@ -202,8 +204,9 @@ isScript = (url) ->
 isAbsolute = (url) ->
   url.charAt(0) is "/" and ( url.indexOf("//") is -1 or url.indexOf("//") > url.indexOf("#") or url.indexOf("//") > url.indexOf("?") )
 
-# init the hash table
-links = new HashTable
+###
+Initiate crawling
+###
 
-# start the cycle
+links = new HashTable
 loadUrl seed
