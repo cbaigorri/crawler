@@ -5,7 +5,6 @@ Module Dependencies
 request = require 'request'
 jsdom = require 'jsdom'
 
-
 ###
 Debugging
 for p, i in process.argv
@@ -34,7 +33,6 @@ else
 if !valid 
   console.error 'Invalid URI!'
   process.exit 1
-
 
 ###
 Hash table
@@ -98,7 +96,6 @@ HashTable = (obj) ->
 
   @
 
-
 ###
 Initiate crawling
 ###
@@ -161,10 +158,6 @@ loadUrl = (url) ->
       # get the next link
       loadUrl getNextLink()
 
-    # status code is 200
-    #if response.statusCode is 200 and response.headers['content-type'] is 'text/html'
-
-
 # init the has table
 links = new HashTable
 
@@ -178,7 +171,6 @@ getNextLink = ->
     nextlink = k  if item.status is `undefined` and nextlink is `undefined`
   nextlink
 
-
 # check if the link is external
 isExternal = (seed, url) ->
   exp = /^([^:\/?#]+:)?(?:\/\/([^\/?#]*))?([^?#]+)?(\?[^#]*)?(#.*)?/
@@ -188,34 +180,10 @@ isExternal = (seed, url) ->
   return true  if typeof match[2] is "string" and match[2].length > 0 and match[2].toLowerCase() isnt match2[2]
   false
 
-
 # check if the link is relative
 isRelative = (url) ->
   url.charAt(0) isnt "" and url.charAt(0) isnt "#" and url.charAt(0) isnt "/" and url.indexOf("//") is -1
 
-
 # check if the link is absolute
 isAbsolute = (url) ->
   url.charAt(0) is "/" and ( url.indexOf("//") is -1 or url.indexOf("//") > url.indexOf("#") or url.indexOf("//") > url.indexOf("?") )
-
-
-###
-
-A list of unvisited URLs - seed this with one or more starting pages
-A list of visited URLs - so you don't go around in circles
-A set of rules for URLs you're not interested in - so you don't index the whole Internet
-
-while(list of unvisited URLs is not empty) {
-    take URL from list
-    fetch content
-    record whatever it is you want to about the content
-    if content is HTML {
-        parse out URLs from links
-        foreach URL {
-           if it matches your rules
-              and it's not already in either the visited or unvisited list
-              add it to the unvisited list
-        }
-    }
-}
-###
