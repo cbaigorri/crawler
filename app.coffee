@@ -158,12 +158,6 @@ loadUrl = (url) ->
       # get the next link
       loadUrl getNextLink()
 
-# init the has table
-links = new HashTable
-
-# start the cycle
-loadUrl seed
-
 # get the next link
 getNextLink = ->
   nextlink = undefined
@@ -187,3 +181,9 @@ isRelative = (url) ->
 # check if the link is absolute
 isAbsolute = (url) ->
   url.charAt(0) is "/" and ( url.indexOf("//") is -1 or url.indexOf("//") > url.indexOf("#") or url.indexOf("//") > url.indexOf("?") )
+
+# init the hash table
+links = new HashTable
+
+# start the cycle
+loadUrl seed
