@@ -114,6 +114,16 @@ loadUrl = (url) ->
     console.log reset + 'FINISHED'
     return
 
+  if isScript(url) 
+    links.setItem url, { status : 'inline javascript', 'content-type' : 'text/html' }
+    loadUrl getNextLink()
+    return
+
+  if isMailto(url) 
+    links.setItem url, { status : 'mailto link', 'content-type' : 'text/html' }
+    loadUrl getNextLink()
+    return
+
   request url, (error, response, body) -> 
     # check for errors
     if error
@@ -133,6 +143,8 @@ loadUrl = (url) ->
       console.log green + url, links.getItem(url)
     else 
       console.log yellow + url, links.getItem(url)
+
+      console.log isScript(url)
 
     # if this is html then parse links
     if response.headers['content-type'] is 'text/html' and !isExternal(seed, url) and response.statusCode isnt 404 
@@ -177,6 +189,14 @@ isExternal = (seed, url) ->
 # check if the link is relative
 isRelative = (url) ->
   url.charAt(0) isnt "" and url.charAt(0) isnt "#" and url.charAt(0) isnt "/" and url.indexOf("//") is -1
+
+# check if the link is mailto
+isMailto = (url) ->
+  url.indexOf("mailto:") isnt -1
+
+# check if the link is javascript
+isScript = (url) ->
+  url.indexOf("javascript:") isnt -1
 
 # check if the link is absolute
 isAbsolute = (url) ->
